@@ -7,13 +7,13 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/lxc/lxd/client"
-	"github.com/lxc/lxd/shared/api"
+	"github.com/lxc/incus/client"
+	"github.com/lxc/incus/shared/api"
 )
 
 var argAutoStart = flag.Bool("auto-start", false, "Start the simulation at boot time")
 
-func cmdCreate(c lxd.ContainerServer, args []string) error {
+func cmdCreate(c incus.InstanceServer, args []string) error {
 	var wgBatch sync.WaitGroup
 
 	// A path must be provided
@@ -66,7 +66,7 @@ func cmdCreate(c lxd.ContainerServer, args []string) error {
 	}
 	defer rootfs.Close()
 
-	imgArgs := &lxd.ImageCreateArgs{
+	imgArgs := &incus.ImageCreateArgs{
 		MetaFile:   meta,
 		MetaName:   "image-meta.tar.xz",
 		RootfsFile: rootfs,
@@ -277,7 +277,7 @@ iface %s inet6 manual
 
 		// Config-only containers
 		if router.Tier > 3 {
-			ct, etag, err := c.GetContainer(router.Name)
+			ct, etag, err := c.GetInstance(router.Name)
 			if err != nil {
 				logf("Failed to configure container '%s': %s", router.Name, err)
 				return
@@ -293,7 +293,7 @@ iface %s inet6 manual
 				ct.Config[k] = v
 			}
 
-			op, err := c.UpdateContainer(router.Name, ct.Writable(), etag)
+			op, err := c.UpdateInstance(router.Name, ct.Writable(), etag)
 			if err != nil {
 				logf("Failed to configure container '%s': %s", router.Name, err)
 				return
@@ -315,13 +315,13 @@ iface %s inet6 manual
 			return
 		}
 
-		req := api.ContainersPost{
+		req := api.InstancesPost{
 			Name: router.Name,
 		}
 		req.Profiles = []string{"internet-base"}
 		req.Config = config
 
-		rop, err := c.CreateContainerFromImage(c, *imgInfo, req)
+		rop, err := c.CreateInstanceFromImage(c, *imgInfo, req)
 		if err != nil {
 			logf("Failed to create container '%s': %s", router.Name, err)
 			return
@@ -334,7 +334,7 @@ iface %s inet6 manual
 		}
 
 		// Setup the devices
-		ct, etag, err := c.GetContainer(router.Name)
+		ct, etag, err := c.GetInstance(router.Name)
 		if err != nil {
 			logf("Failed to configure container '%s': %s", router.Name, err)
 			return
@@ -344,7 +344,7 @@ iface %s inet6 manual
 			ct.Devices[k] = v
 		}
 
-		op, err := c.UpdateContainer(router.Name, ct.Writable(), etag)
+		op, err := c.UpdateInstance(router.Name, ct.Writable(), etag)
 		if err != nil {
 			logf("Failed to configure container '%s': %s", router.Name, err)
 			return

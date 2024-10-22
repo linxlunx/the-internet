@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lxc/lxd/client"
+	"github.com/lxc/incus/client"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func run() error {
 	flag.Parse()
 
 	// Connect to LXD
-	c, err := lxd.ConnectLXDUnix("", nil)
+	c, err := incus.ConnectIncusUnix("", nil)
 	if err != nil {
 		return err
 	}

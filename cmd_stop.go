@@ -5,11 +5,11 @@ import (
 	"os"
 	"sync"
 
-	"github.com/lxc/lxd/client"
-	"github.com/lxc/lxd/shared/api"
+	"github.com/lxc/incus/client"
+	"github.com/lxc/incus/shared/api"
 )
 
-func cmdStop(c lxd.ContainerServer, args []string) error {
+func cmdStop(c incus.InstanceServer, args []string) error {
 	var wgBatch sync.WaitGroup
 
 	if os.Getuid() != 0 {
@@ -35,13 +35,13 @@ func cmdStop(c lxd.ContainerServer, args []string) error {
 	stopContainer := func(name string) {
 		defer wgBatch.Done()
 
-		req := api.ContainerStatePut{
+		req := api.InstanceStatePut{
 			Action:  "stop",
 			Timeout: -1,
 			Force:   true,
 		}
 
-		op, err := c.UpdateContainerState(name, req, "")
+		op, err := c.UpdateInstanceState(name, req, "")
 		if err != nil {
 			return
 		}

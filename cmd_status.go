@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/lxc/lxd/client"
+	"github.com/lxc/incus/client"
 )
 
-func cmdStatus(c lxd.ContainerServer, args []string) error {
+func cmdStatus(c incus.InstanceServer, args []string) error {
 	// Load the simulation
 	routers, err := importFromLXD(c)
 	if err != nil {

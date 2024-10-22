@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/lxc/lxd/shared"
+	"github.com/linxlunx/the-internet/shared"
 )
 
 func networkInterfaces(routers Routers) ([]string, []string, error) {

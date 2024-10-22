@@ -6,12 +6,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lxc/lxd/client"
+	"github.com/lxc/incus/client"
+	"github.com/lxc/incus/shared/api"
 )
 
-func importFromLXD(c lxd.ContainerServer) (Routers, error) {
+func importFromLXD(c incus.InstanceServer) (Routers, error) {
 	// Load the LXD container list
-	containers, err := c.GetContainers()
+	containers, err := c.GetInstances(api.InstanceType(""))
 	if err != nil {
 		return nil, err
 	}

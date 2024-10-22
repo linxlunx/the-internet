@@ -5,11 +5,11 @@ import (
 	"os"
 	"sync"
 
-	"github.com/lxc/lxd/client"
-	"github.com/lxc/lxd/shared/api"
+	"github.com/lxc/incus/client"
+	"github.com/lxc/incus/shared/api"
 )
 
-func cmdStart(c lxd.ContainerServer, args []string) error {
+func cmdStart(c incus.InstanceServer, args []string) error {
 	var wgBatch sync.WaitGroup
 
 	if os.Getuid() != 0 {
@@ -42,12 +42,12 @@ func cmdStart(c lxd.ContainerServer, args []string) error {
 	startContainer := func(name string) {
 		defer wgBatch.Done()
 
-		req := api.ContainerStatePut{
+		req := api.InstanceStatePut{
 			Action:  "start",
 			Timeout: -1,
 		}
 
-		op, err := c.UpdateContainerState(name, req, "")
+		op, err := c.UpdateInstanceState(name, req, "")
 		if err != nil {
 			logf("Failed to start container: %s: %s", name, err)
 			return

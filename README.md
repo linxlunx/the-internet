@@ -1,25 +1,31 @@
-# Dependencies
- * linux (>= 3.16 for all features or >= 3.13 for basic features)
- * golang (>= 1.5)
- * lxd
+# The Internet
 
-# Kernel
-The simulation is intended to run inside nested unprivileged LXC
-containers. As a result, a kernel with full support for unprivileged
-containers is required, that is any kernel >= 3.13 with all the options
-required by LXC enabled (see lxc-checkconfig).
+## Overview
+Forked from [Northsec the-internet](https://github.com/nsec/the-internet)
+We have to modify some lines to build the application because [lxd](https://github.com/lxc/lxd) has been migrated to [incus](https://github.com/lxc/incus)
 
-Additionally, unprivileged qdisc operations requires a >= 3.16 kernel to
-work, so if you want to get the simulated latencies and speeds, you need
-to run a very recent kernel.
+Tested with:
+Ubuntu 24.04 - Linux 6.8.0-47-generic #47-Ubuntu
+Go 1.22.2 linux/amd6
+
+## Prerequisites
+- [Incus](https://linuxcontainers.org/incus/introduction/)
+
+## Build
+- Clone
+```
+$ git clone https://github.com/linxlunx/the-internet
+```
+- Init
+```
+$ go mod init
+```
+- Build
+```
+$ go build
+```
 
 # Starting the whole thing
-This tool is meant to be run on a machine or inside a container on which
-a LXD daemon is running.
-
-First build it with:
- - go get -v -x github.com/nsec/the-internet
-
 Creating an Internet simulation is basically as simple as:
  - the-internet create \<path\>
  - the-internet start

@@ -5,11 +5,11 @@ import (
 	"os"
 	"sync"
 
-	"github.com/lxc/lxd/client"
-	"github.com/lxc/lxd/shared/api"
+	"github.com/lxc/incus/client"
+	"github.com/lxc/incus/shared/api"
 )
 
-func cmdDestroy(c lxd.ContainerServer, args []string) error {
+func cmdDestroy(c incus.InstanceServer, args []string) error {
 	var wgBatch sync.WaitGroup
 
 	if os.Getuid() != 0 {
@@ -32,12 +32,12 @@ func cmdDestroy(c lxd.ContainerServer, args []string) error {
 	}
 
 	// Load the LXD container list
-	containers, err := c.GetContainers()
+	containers, err := c.GetInstances(api.InstanceType(""))
 	if err != nil {
 		return err
 	}
 
-	containersMap := map[string]api.Container{}
+	containersMap := map[string]api.Instance{}
 	for _, ctn := range containers {
 		containersMap[ctn.Name] = ctn
 	}
@@ -54,13 +54,13 @@ func cmdDestroy(c lxd.ContainerServer, args []string) error {
 
 		// Stop
 		if ct.IsActive() {
-			req := api.ContainerStatePut{
+			req := api.InstanceStatePut{
 				Action:  "stop",
 				Timeout: -1,
 				Force:   true,
 			}
 
-			op, err := c.UpdateContainerState(ct.Name, req, "")
+			op, err := c.UpdateInstanceState(ct.Name, req, "")
 			if err != nil {
 				logf("Failed to delete container: %s: %s", ct.Name, err)
 				return
@@ -74,7 +74,7 @@ func cmdDestroy(c lxd.ContainerServer, args []string) error {
 		}
 
 		// Delete
-		op, err := c.DeleteContainer(ct.Name)
+		op, err := c.DeleteInstance(ct.Name)
 		if err != nil {
 			logf("Failed to delete container: %s: %s", ct.Name, err)
 			return

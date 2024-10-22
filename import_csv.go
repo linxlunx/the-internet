@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lxc/lxd/shared"
+	"github.com/linxlunx/the-internet/shared"
 )
 
 func parseCSV(path string) ([][]string, error) {
