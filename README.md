@@ -2,11 +2,12 @@
 
 ## Overview
 Forked from [Northsec the-internet](https://github.com/nsec/the-internet)
+
 We have to modify some lines to build the application because [lxd](https://github.com/lxc/lxd) has been migrated to [incus](https://github.com/lxc/incus)
 
 Tested with:
-Ubuntu 24.04 - Linux 6.8.0-47-generic #47-Ubuntu
-Go 1.22.2 linux/amd6
+- Ubuntu 24.04 - Linux 6.8.0-47-generic #47-Ubuntu
+- Go 1.22.2 linux/amd6
 
 ## Prerequisites
 - [Incus](https://linuxcontainers.org/incus/introduction/)
